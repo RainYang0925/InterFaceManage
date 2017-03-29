@@ -1,0 +1,40 @@
+{% extends "UserGroup/usercenterbase.html" %}
+{% block well %}
+    <div id="app">
+        <form method="post" action="{% url 'updateinfo' %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label>用户名</label>
+                <input class="form-control" name="user" placeholder="请输入用户名" disabled id="username">
+            </div>
+            <div class="form-group">
+                <label>昵称</label>
+                <input class="form-control" name="nickname" id="nickname" disabled>
+            </div>
+            <div class="form-group">
+                <label>密码</label>
+                <input class="form-control" placeholder="请输入密码" name="password">
+            </div>
+            <button type="submit" class="btn btn-default">修改</button>
+        </form>
+    </div>
+    <script>
+        $(document).ready(function () {
+            getInfo()
+        });
+        function getInfo() {
+            var userToken = localStorage.getItem(['loginToken']);
+            if (userToken) {
+                data = {
+                    'usertoken': userToken
+                };
+                $.get('/usergroup/checktoken/', data, function (result) {
+                    console.log(result);
+                    $("#username").val(result['username']);
+                    $("#nickname").val(result['nickname']);
+                })
+            }
+        }
+    </script>
+{% endblock %}
+
