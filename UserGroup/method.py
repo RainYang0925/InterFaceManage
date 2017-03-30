@@ -75,7 +75,7 @@ class Login(object):
 	def get_user_info(self, para_key, type):
 		"""
 		获取用户信息,调用之前确保使用login_check校验通过
-		:param username: {str} 用户名
+		:param para_key: {str} 查询条件的值
 		:return: {dick} params={'nickname', 'loginToken'}
 		"""
 		if type == 'username':
@@ -102,6 +102,35 @@ class Login(object):
 		userinfo.login_token = ''
 		userinfo.save()
 		return True
+
+
+class UserInfo(object):
+	def check_password(self, token, pwd):
+		"""
+		校验用户密码是否正确
+		:param pwd: {str} 密码
+		:return: {boolen} True/False
+		"""
+		try:
+			userinfo = UserGroup.objects.get(login_token=token)
+		except Exception:
+			return False
+		return True if userinfo.password == pwd else False
+
+	def update_password(self, username, pwd):
+		"""
+		修改密码
+		:param username:{str} 用户名
+		:param pwd:{str} 密码
+		:return:{boolen} True/False
+		"""
+		try:
+			userinfo = UserGroup.objects.get(username=username)
+			userinfo.password = pwd
+			userinfo.save()
+			return True
+		except Exception:
+			return False
 
 
 

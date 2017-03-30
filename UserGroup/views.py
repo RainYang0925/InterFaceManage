@@ -11,6 +11,7 @@ import method
 import errconfig
 
 Login_Check = method.Login()
+User_Check = method.UserInfo()
 
 
 def index(request):
@@ -60,6 +61,27 @@ def operation_log(request):
 
 
 def update_info(request):
+	if request.method == 'POST':
+		rst = {}
+		token = request.POST.get('token')
+		oldpwd = request.POST.get('oldpwd')
+		newpwd = request.POST.get('newpwd')
+		if token:
+			if User_Check.check_password(token, oldpwd):
+				userinfo = Login_Check.get_user_info(token, 'token')
+				if User_Check.update_password(userinfo['username'], newpwd):
+					rst['error_no'] = 'UG0000'
+					rst['error_msg'] = errconfig.errConfig['UG0000']
+				else:
+					rst['error_no'] = 'UG0006'
+					rst['error_msg'] = errconfig.errConfig['UG0006']
+			else:
+				rst['error_no'] = 'UG0007'
+				rst['error_msg'] = errconfig.errConfig['UG0007']
+		else:
+			rst['error_no'] = 'UG0008'
+			rst['error_msg'] = 'UG0008'
+		return JsonResponse(rst, safe=False)
 	return render(request, 'UserGroup/usercenterupdateinfo.html')
 
 # =================================Ajax==================================

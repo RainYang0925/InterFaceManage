@@ -4,37 +4,60 @@
         <form method="post" action="{% url 'updateinfo' %}">
             {% csrf_token %}
             <div class="form-group">
-                <label>用户名</label>
-                <input class="form-control" name="user" placeholder="请输入用户名" disabled id="username">
+                <label>请输入原密码</label>
+                <input class="form-control" name="password" v-model="form.oldpwd" type="password">
             </div>
             <div class="form-group">
-                <label>昵称</label>
-                <input class="form-control" name="nickname" id="nickname" disabled>
+                <label>请输入新密码</label>
+                <input class="form-control" name="password" v-model="form.newpwd" type="password">
             </div>
             <div class="form-group">
-                <label>密码</label>
-                <input class="form-control" placeholder="请输入密码" name="password">
+                <label>请再次输入新密码</label>
+                <input class="form-control" name="password" v-model="form.repnewpwd" type="password">
             </div>
-            <button type="submit" class="btn btn-default">修改</button>
+            <button type="button" class="btn btn-default" @click="submit">修改</button>
         </form>
     </div>
     <script>
-        $(document).ready(function () {
-            getInfo()
-        });
-        function getInfo() {
-            var userToken = localStorage.getItem(['loginToken']);
-            if (userToken) {
-                data = {
-                    'usertoken': userToken
-                };
-                $.get('/usergroup/checktoken/', data, function (result) {
-                    console.log(result);
-                    $("#username").val(result['username']);
-                    $("#nickname").val(result['nickname']);
-                })
+        var app = new Vue({
+            el: '#app',
+            data: {
+                form: {
+                    oldpwd: this.oldpwd,
+                    newpwd: this.newpwd,
+                    repnewpwd: this.repnewpwd
+                }
+
+            },
+            methods: {
+                submit: function () {
+                    var userToken = localStorage.getItem(['loginToken']);
+                    if (this.form.newpwd == this.form.repnewpwd) {
+                        pwd_form = {
+                            'oldpwd': this.form.oldpwd,
+                            'newpwd': this.form.newpwd,
+                            'token': userToken
+                        };
+                        $.ajaxSetup({
+                            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+                        });
+                        $.post('/usergroup/updateinfo/', pwd_form, function (result) {
+                            if (result['error_no'] == 'UG0000'){
+                                alert(result['error_msg']);
+                                window.location.href = '/usergroup/usercenter/'
+                            }else {
+                                alert(result['error_msg']);
+                                app.form.oldpwd = '';
+                                app.form.newpwd = '';
+                                app.form.repnewpwd = '';
+                            }
+                        })
+                    } else {
+                        alert('两次输入的密码不一致')
+                    }
+                }
             }
-        }
+        })
     </script>
 {% endblock %}
 
