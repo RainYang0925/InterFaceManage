@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>
+        {% block title %}
+        {% endblock %}
+    </title>
+    {% block script %}
+    {% endblock %}
+</head>
+<header>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="{% url 'usercenter' %}">个人中心</a>
+            </div>
+            <div class="collapse navbar-collapse" id="userFunc">
+                <ul class="nav navbar-nav navbar-right">
+                    <li class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true"
+                           aria-expanded="false" id="nickname">{{ nickname }} <span class="caret"></span></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'user' %}">新增用户</a></li>
+                            <li><a href="#" @click="sign_out">退出登录</a></li>
+                        </ul>
+                    </li>
+                </ul>
+            </div><!-- /.navbar-collapse -->
+        </div><!-- /.container-fluid -->
+    </nav>
+</header>
+<body>
+{% block body %}
+
+{% endblock %}
+</body>
+<script>
+    {% if loginToken %}
+        localStorage.setItem('loginToken', "{{ loginToken }}");
+    {% endif %}
+    var userFunc = new Vue({
+        el: '#userFunc',
+        data: {},
+        methods: {
+            sign_out: function () {
+                var userToken = localStorage.getItem(['loginToken']);
+                data = {
+                    'usertoken': userToken
+                };
+                $.get('/usergroup/signout/', data, function (result) {
+                    console.log(result);
+                    if (result['error_no'] == 'UG0000') {
+                        alert(result['error_msg']);
+                        window.location.href = '/usergroup/'
+                    } else {
+                        alert(result['error_msg'])
+                    }
+
+                })
+            }
+        }
+    });
+</script>
+</html>
