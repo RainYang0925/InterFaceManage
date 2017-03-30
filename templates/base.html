@@ -4,9 +4,15 @@
     <meta charset="UTF-8">
     <title>
         {% block title %}
+            <!-- 设置标题处 -->
         {% endblock %}
     </title>
-    {% block script %}
+    <link href="/static/bootstrap/bootstrap.min.css" rel="stylesheet">
+    <script src="/static/js/jquery-3.0.0.min.js"></script>
+    <script src="/static/js/bootstrap.min.js"></script>
+    <script src="/static/js/vue.js"></script>
+    {% block ziyuan %}
+        <!-- 资源引用 -->
     {% endblock %}
 </head>
 <header>
@@ -32,7 +38,7 @@
 </header>
 <body>
 {% block body %}
-
+    <!-- body填写处 -->
 {% endblock %}
 </body>
 <script>
