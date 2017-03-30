@@ -7,3 +7,7 @@ from django.shortcuts import render
 
 def index(request):
 	return render(request, 'InterFaceManage/index.html')
+
+
+def newinterface(request):
+	return render(request, 'InterFaceManage/newinterface.html')
