@@ -5,3 +5,231 @@
 {% block ziyuan %}
     <script src="/static/js/UserGroup/loginCheck.js"></script>
 {% endblock %}
+{% block body %}
+    <form class="form-horizontal" id="apiform">
+        <div class="form-group">
+            <label class="col-sm-2 control-label">接口版本</label>
+            <div class="col-sm-2">
+                <input class="form-control" placeholder="请输入接口版本号" v-model="apiversion">
+            </div>
+            <label class="col-sm-1 control-label">接口名称</label>
+            <div class="col-sm-2">
+                <input class="form-control" placeholder="请输入接口名称" v-model="apiname">
+            </div>
+            <label class="col-sm-1 control-label">接口状态</label>
+            <div class="col-sm-2">
+                <select class="form-control" v-model="apistatus" options="apiStatusOption">
+                    <option value="normal">正常</option>
+                    <option value="invalid">无效</option>
+                    <option value="developing">开发中</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">所属模块</label>
+            <div class="col-sm-2">
+                <select class="form-control" v-model="belongmodel">
+                    <option value="UserManage">用户管理</option>
+                    <option value="SystemFunc">系统功能</option>
+                    <option value="Combination">组合</option>
+                    <option value="FinancitionMsg">财讯</option>
+                    <option value="Articles">文章</option>
+                    <option value="MsgPush">消息推送</option>
+                    <option value="StockCompetition">炒股大赛</option>
+                    <option value="Advertisement">广告</option>
+                    <option value="InterestManage">投顾管理</option>
+                    <option value="View">观点</option>
+                    <option value="Question">问题</option>
+                    <option value="SensitiveWords">敏感词</option>
+                    <option value="InvestmentCollege">投资学院</option>
+                    <option value="StockLive">股市直播</option>
+                </select>
+            </div>
+            <label class="col-sm-1 control-label">所属系统</label>
+            <div class="col-sm-2">
+                <select class="form-control" v-model="belongsystem">
+                    <option value="caJava">微证券中台</option>
+                    <option value="bus">云投顾bus</option>
+                    <option value="netHall">网厅</option>
+                    <option value="stockLiveBroadcast">股市直播（app）</option>
+                    <option value="broadcastBus">股市直播（后台）bus</option>
+                    <option value="web">智信理财师</option>
+                    <option value="chinalin_pay">华林支付中台</option>
+                </select>
+            </div>
+            <label class="col-sm-1 control-label">开发者</label>
+            <div class="col-sm-2">
+                <select class="form-control" v-model="developer">
+                    <option value="wudw">吴道万</option>
+                    <option value="xucx">徐成勋</option>
+                    <option value="huangq">黄强</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">使用范围</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" rows="3" v-model="userrange"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">接口URL</label>
+            <div class="col-sm-5">
+                <input class="form-control" placeholder="请输入接口URL" v-model="apiurl">
+            </div>
+            <label class="col-sm-1 control-label">请求方式</label>
+            <div class="col-sm-2">
+                <select class="form-control" v-model="requestmethod">
+                    <option value="GET">GET</option>
+                    <option value="POST">POST</option>
+                    <option value="PUT">PUT</option>
+                    <option value="DELETE">DELETE</option>
+                </select>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">Mock地址</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" rows="3" v-model="mockurl">无</textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">请求头说明</label>
+            <div class="col-sm-8">
+                <input class="form-control" placeholder="请输入请求头说明" value="无" v-model="requestheaddoc">
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">输入参数说明</label>
+            <div v-for="(inputpara, index) in inputparas">
+                <div class="col-sm-1">
+                    <input class="form-control" placeholder="参数名" v-model="inputparas.paraName">
+                </div>
+                <div class="col-sm-1">
+                    <select class="form-control" v-model="inputparas[index].paraType">
+                        <option value="String">String</option>
+                        <option value="Int">Int</option>
+                        <option value="List">List</option>
+                        <option value="JSONString">JSONString</option>
+                        <option value="Date">Date</option>
+                        <option value="Boolean">Boolean</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                    <input class="form-control" placeholder="长度" v-model="inputparas.paraLength">
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" placeholder="参数说明" v-model="inputparas.paraDoc">
+                </div>
+                <div class="col-sm-1">
+                    <input class="form-control" placeholder="缺省值" v-model="inputparas.paraDefault">
+                </div>
+                <div class="col-sm-1">
+                    <select class="form-control" v-model="inputparas.paraIsNeed">
+                        <option value="no">非必填</option>
+                        <option value="yes">必填</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                    <button type="button" class="btn btn-danger" @click="inputParaRemove">X</button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">请求示例</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" rows="5" id="RequestDemo"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">返回参数说明</label>
+            <div id="returnPara" data-box="01">
+                <div class="col-sm-1">
+                    <input class="form-control" placeholder="参数名" data-return="00">
+                </div>
+                <div class="col-sm-1">
+                    <select class="form-control" data-return="01">
+                        <option value="String">String</option>
+                        <option value="Int">Int</option>
+                        <option value="List">List</option>
+                        <option value="JSONString">JSONString</option>
+                        <option value="Date">Date</option>
+                        <option value="Boolean">Boolean</option>
+                    </select>
+                </div>
+                <div class="col-sm-1">
+                    <input class="form-control" placeholder="长度" data-return="02">
+                </div>
+                <div class="col-sm-3">
+                    <input class="form-control" placeholder="参数说明" data-return="03">
+                </div>
+                <div class="col-sm-1">
+                    <select class="form-control" data-return="04">
+                        <option value="no">非必返</option>
+                        <option value="yes">必返</option>
+                    </select>
+                </div>
+                <div class="col-sm-2">
+                    <button type="button" class="btn btn-default" id="returnParaMinus">
+                        <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">正确返回示例</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" rows="5" id="RightReturnDoc"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">错误返回示例</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" rows="3" id="ErrorReturnDoc"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="col-sm-2 control-label">错误码</label>
+            <div class="col-sm-8">
+                <textarea class="form-control" rows="3" id="ErrorCode"></textarea>
+            </div>
+        </div>
+        <div class="form-group">
+            <div class="col-sm-offset-2 col-sm-10">
+                <button type="button" class="btn btn-default" @click="submit">提交</button>
+            </div>
+        </div>
+    </form>
+{% endblock %}
+{% block script %}
+    <script>
+        var apiform = new Vue({
+            el: '#apiform',
+            data: {
+                apiversion: this.apiversionm,
+                apiname: this.apiname,
+                apistatus: 'normal',
+                belongmodel: 'UserManage',
+                belongsystem: 'caJava',
+                developer: this.developer,
+                userrange: this.userrange,
+                apiurl: this.apiurl,
+                requestmethod: 'GET',
+                mockurl: '无',
+                requestheaddoc: '无',
+                inputparas: [
+                    {paraName: '', paraType: '', paraLength: '', paraDoc: '', paraDefault: '', paraIsNeed: ''}
+                ],
+                inputPara: ['', 'String', '', '', '', 'no']
+            },
+            methods: {
+                submit: function () {
+                    console.log(this.$data)
+                },
+                inputParaRemove: function (i) {
+                    this.inputparas.splice(i, 1)
+                }
+            }
+        })
+    </script>
+{% endblock %}
