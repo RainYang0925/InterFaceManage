@@ -55,6 +55,12 @@ def user(request):
 			id_insert.save()
 		except Exception as e:
 			error = e
+		logData = {
+			'username': 'admin',
+			'nickname': '系统管理员',
+			'operate_action': errconfig.actionConfig['AC0002'] + nickname + '(' + username + ')'
+		}
+		logOperate.write_log(logData)
 		return HttpResponseRedirect('UserGroup/user/', {'error': error})
 	return render(request, 'UserGroup/user.html')
 
@@ -79,6 +85,12 @@ def update_info(request):
 				if User_Check.update_password(userinfo['username'], newpwd):
 					rst['error_no'] = 'UG0000'
 					rst['error_msg'] = errconfig.errConfig['UG0000']
+					logData = {
+						'username': userinfo['username'],
+						'nickname': userinfo['nickname'],
+						'operate_action': errconfig.actionConfig['AC0003']
+					}
+					logOperate.write_log(logData)
 				else:
 					rst['error_no'] = 'UG0006'
 					rst['error_msg'] = errconfig.errConfig['UG0006']
@@ -90,6 +102,7 @@ def update_info(request):
 			rst['error_msg'] = 'UG0008'
 		return JsonResponse(rst, safe=False)
 	return render(request, 'UserGroup/usercenterupdateinfo.html')
+
 
 # =================================Ajax==================================
 
