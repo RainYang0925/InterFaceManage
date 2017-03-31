@@ -20,4 +20,5 @@ urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^usergroup/', include('UserGroup.urls')),
     url(r'^interfacemanage/', include('InterFaceManage.urls')),
+    url(r'^logrecord/', include('LogRecord.urls')),
 ]

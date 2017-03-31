@@ -4,7 +4,7 @@
 # Web   : http://wybblog.applinzi.com
 from django.http import JsonResponse, HttpResponseRedirect
 from django.shortcuts import render
-
+from LogRecord.logMethod import LogOperate
 from models import UserGroup
 import datetime
 import method
@@ -12,6 +12,7 @@ import errconfig
 
 Login_Check = method.Login()
 User_Check = method.UserInfo()
+logOperate = LogOperate()
 
 
 def index(request):
@@ -21,6 +22,12 @@ def index(request):
 		if Login_Check.login_check(username, password):
 			if Login_Check.write_hash(username):
 				userinfo = Login_Check.get_user_info(username, 'username')
+				logData = {
+					'username': userinfo['username'],
+					'nickname': userinfo['nickname'],
+					'operate_action': errconfig.actionConfig['AC0001']
+				}
+				logOperate.write_log(logData)
 				return render(request, 'UserGroup/usercenter.html',
 							  {"nickname": userinfo['nickname'], 'loginToken': str(userinfo['loginToken'])})
 			else:

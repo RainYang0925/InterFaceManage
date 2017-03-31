@@ -1,6 +1,30 @@
 {% extends "UserGroup/usercenterbase.html" %}
 {% block well %}
-    <h1>
-        功能暂未开发,敬请期待!!!!
-    </h1>
+    <div class="panel panel-default" id="operateLog">
+        <div class="panel-heading">
+            <h3 class="panel-title">操作日志</h3>
+        </div>
+        <div class="panel-body">
+            <ul class="list-group" id="logs">
+            </ul>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            getLog()
+        });
+        function getLog() {
+            var userToken = localStorage.getItem(['loginToken']);
+            data = {
+                'token': userToken
+            };
+            $.get('/logrecord/getlog/', data, function (rst) {
+                for (i = 0; i < rst.length; i++) {
+                    $("#logs").append('<li class="list-group-item">' + rst[i] + '</li>')
+                }
+            })
+        }
+    </script>
 {% endblock %}

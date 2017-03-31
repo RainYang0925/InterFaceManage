@@ -85,7 +85,8 @@ class Login(object):
 		data = {
 			'nickname': userinfo.nickname,
 			'loginToken': userinfo.login_token,
-			'username': userinfo.username
+			'username': userinfo.username,
+			'level': userinfo.level
 		}
 		return data
 
