@@ -7,40 +7,70 @@
 {% endblock %}
 {% block body %}
     <div id="apibody">
-        <div class="panel panel-default">
-            <div class="panel-heading">接口名称</div>
-            <div class="panel-body">
-                {{ api_info.ApiName }}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">接口版本</div>
+                    <div class="panel-body">
+                        {{ api_info.ApiVersion }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">接口名称</div>
+                    <div class="panel-body">
+                        {{ api_info.ApiName }}
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">接口状态</div>
+                    <div class="panel-body" id="apiStatus">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">接口版本</div>
-            <div class="panel-body">
-                {{ api_info.ApiVersion }}
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">所属模块</div>
+                    <div class="panel-body" id="belongModel">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">所属系统</div>
+                    <div class="panel-body" id="belongSystem">
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">开发者</div>
+                    <div class="panel-body" id="developer">
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">接口状态</div>
-            <div class="panel-body" id="apiStatus">
-
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">请求方式</div>
+                    <div class="panel-body">
+                        {{ api_info.RequestMethod }}
+                    </div>
+                </div>
             </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">所属模块</div>
-            <div class="panel-body" id="belongModel">
-
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">所属系统</div>
-            <div class="panel-body" id="belongSystem">
-
-            </div>
-        </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">请求方式</div>
-            <div class="panel-body">
-                {{ api_info.RequestMethod }}
+            <div class="col-md-8">
+                <div class="panel panel-default">
+                    <div class="panel-heading">接口地址</div>
+                    <div class="panel-body">
+                        {{ api_info.ApiUrl }}
+                    </div>
+                </div>
             </div>
         </div>
         <div class="panel panel-default">
@@ -49,12 +79,7 @@
                 {{ api_info.MockUrl }}
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">接口地址</div>
-            <div class="panel-body">
-                {{ api_info.ApiUrl }}
-            </div>
-        </div>
+
         <div class="panel panel-default">
             <div class="panel-heading">请求头说明</div>
             <div class="panel-body">
@@ -70,7 +95,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">请求参数</div>
             <div class="panel-body">
-                <table class="table table-striped">
+                <table class="table table-hover">
                     <thead>
                     <td>参数名</td>
                     <td>类型</td>
@@ -125,12 +150,7 @@
                 {{ api_info.ErrCode }}
             </div>
         </div>
-        <div class="panel panel-default">
-            <div class="panel-heading">开发者</div>
-            <div class="panel-body" id="developer">
 
-            </div>
-        </div>
         <button class="btn btn-default" type="button" @click="update">修改按钮</button>
     </div>
 {% endblock %}
