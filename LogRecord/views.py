@@ -27,3 +27,12 @@ def get_log(request):
 
 def write_log(request):
 	pass
+
+
+def get_api_log(request):
+	api_log = Log.objects.filter(operate_action=u'新增接口').order_by('-pk')[:20]
+	rst = []
+	for x in api_log:
+		data = x.nickname + '(' + x.username + u') 于 ' + str(x.operate_time) + u' 进行了 ' + x.operate_action + u' 操作'
+		rst.append(data)
+	return JsonResponse(rst, safe=False)

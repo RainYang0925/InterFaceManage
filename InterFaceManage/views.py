@@ -7,10 +7,16 @@ from django.http import JsonResponse
 import json
 import method
 import errconfig
+from LogRecord import logMethod
+from UserGroup.method import Login
+from models import Interface
 api_manage = method.ApiManage()
+logRecord = logMethod.LogOperate()
+login = Login()
 
 
 def index(request):
+
 	return render(request, 'InterFaceManage/index.html')
 
 
@@ -70,6 +76,13 @@ def newinterface(request):
 			api_manage.create_api(interface_data)
 			rst_data['error_no'] = 'IF0000'
 			rst_data['error_info'] = errconfig.errConfig['IF0000']
+			userinfo = login.get_user_info(interface_data['developer'], 'username')
+			logData = {
+				'username': userinfo['username'],
+				'nickname': userinfo['nickname'],
+				'operate_action': errconfig.actionConfig['AC0001']
+			}
+			logRecord.write_log(logData)
 		except TypeError:
 			rst_data['error_no'] = 'IF0001'
 			rst_data['error_info'] = errconfig.errConfig['IF0001']
@@ -78,3 +91,17 @@ def newinterface(request):
 			rst_data['error_info'] = errconfig.errConfig['IF0002']
 		return JsonResponse(rst_data, safe=False)
 	return render(request, 'InterFaceManage/newinterface.html')
+
+
+# ===============AJAX======================
+
+def get_api_record(request):
+	rst = []
+	api_info = Interface.objects.all().order_by('-pk')[:20]
+	for x in api_info:
+		data = {
+			'api_name': x.ApiName,
+			'api_id': x.id,
+		}
+		rst.append(data)
+	return JsonResponse(rst, safe=False)

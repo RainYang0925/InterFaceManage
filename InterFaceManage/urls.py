@@ -8,5 +8,7 @@ from . import views
 
 urlpatterns = [
 	url(r'^$', views.index, name='interfacemanageindex'),
-	url(r'^newinterface/', views.newinterface, name='newinterface')
+	url(r'^newinterface/', views.newinterface, name='newinterface'),
+	# ============Ajax==============
+	url(r'^getapirecord/', views.get_api_record),
  ]

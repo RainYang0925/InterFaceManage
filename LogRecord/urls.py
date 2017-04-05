@@ -8,5 +8,6 @@ from . import views
 
 urlpatterns = [
 	# url(r'^$', views.index),
-	url(r'^getlog/', views.get_log)
+	url(r'^getlog/', views.get_log),
+	url(r'^getapilog/', views.get_api_log),
 ]

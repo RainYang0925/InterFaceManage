@@ -9,6 +9,9 @@ from models import UserGroup
 import datetime
 import method
 import errconfig
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
 
 Login_Check = method.Login()
 User_Check = method.UserInfo()

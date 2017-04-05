@@ -5,3 +5,51 @@
 {% block ziyuan %}
     <script src="/static/js/UserGroup/loginCheck.js"></script>
 {% endblock %}
+{% block body %}
+    <div class="container">
+        <div class="row">
+            <div class="col-md-5">
+                <div class="panel panel-default">
+                    <div class="panel-heading">接口动态</div>
+                    <div class="panel-body">
+                        <div id="apidynamic">
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-7">
+                <div class="panel panel-default">
+                    <div class="panel-heading">最新接口</div>
+                    <div class="panel-body">
+                        <div id="apiinfo">
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            getLog();
+            getApiInfo()
+        });
+        function getLog() {
+            $.get('/logrecord/getapilog/', function (rst) {
+                for (var i = 0; i < rst.length; i++) {
+                    $("#apidynamic").append('<li class="list-group-item">' + rst[i] + '</li>')
+                }
+
+            })
+        }
+        function getApiInfo() {
+            $.get('/interfacemanage/getapirecord/', function (rst) {
+                for (var i = 0; i < rst.length; i++) {
+                    $("#apiinfo").append('<li class="list-group-item">' + rst[i]['api_id'] + '--' +rst[i]['api_name'] +'</li>')
+                }
+            })
+        }
+    </script>
+{% endblock %}
