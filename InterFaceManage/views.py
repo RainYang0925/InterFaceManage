@@ -93,7 +93,12 @@ def newinterface(request):
 	return render(request, 'InterFaceManage/newinterface.html')
 
 
+def interface(request, api_id):
+	api_info = Interface.objects.get(id=int(api_id))
+	return render(request, 'InterFaceManage/interface.html', {'api_info': api_info})
+
 # ===============AJAX======================
+
 
 def get_api_record(request):
 	rst = []

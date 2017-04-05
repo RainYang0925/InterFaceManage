@@ -47,7 +47,7 @@
         function getApiInfo() {
             $.get('/interfacemanage/getapirecord/', function (rst) {
                 for (var i = 0; i < rst.length; i++) {
-                    $("#apiinfo").append('<li class="list-group-item">' + rst[i]['api_id'] + '--' +rst[i]['api_name'] +'</li>')
+                    $("#apiinfo").append('<li class="list-group-item"><a href="/interfacemanage/interface/'+rst[i]["api_id"]+'">' + rst[i]['api_id'] + '--' +rst[i]['api_name'] +'</a></li>')
                 }
             })
         }

@@ -1,0 +1,287 @@
+{% extends 'base.html' %}
+{% block ziyuan %}
+    <script src="/static/js/UserGroup/loginCheck.js"></script>
+{% endblock %}
+{% block title %}
+    接口详情
+{% endblock %}
+{% block body %}
+    <div id="apibody">
+        <div class="panel panel-default">
+            <div class="panel-heading">接口名称</div>
+            <div class="panel-body">
+                {{ api_info.ApiName }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">接口版本</div>
+            <div class="panel-body">
+                {{ api_info.ApiVersion }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">接口状态</div>
+            <div class="panel-body" id="apiStatus">
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">所属模块</div>
+            <div class="panel-body" id="belongModel">
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">所属系统</div>
+            <div class="panel-body" id="belongSystem">
+
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">请求方式</div>
+            <div class="panel-body">
+                {{ api_info.RequestMethod }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">Mock地址</div>
+            <div class="panel-body">
+                {{ api_info.MockUrl }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">接口地址</div>
+            <div class="panel-body">
+                {{ api_info.ApiUrl }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">请求头说明</div>
+            <div class="panel-body">
+                {{ api_info.RequestHeadDoc }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">使用范围</div>
+            <div class="panel-body">
+                {{ api_info.UserRange }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">请求参数</div>
+            <div class="panel-body">
+                <table class="table table-striped">
+                    <thead>
+                    <td>参数名</td>
+                    <td>类型</td>
+                    <td>长度</td>
+                    <td>参数说明</td>
+                    <td>缺省值</td>
+                    <td>是否必填</td>
+                    </thead>
+                    <tbody id="inputTbody">
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">请求示例</div>
+            <div class="panel-body">
+                {{ api_info.RequestDemo }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">返回参数</div>
+            <div class="panel-body">
+                <table class="table table-hover">
+                    <thead>
+                    <td>参数名</td>
+                    <td>类型</td>
+                    <td>长度</td>
+                    <td>参数说明</td>
+                    <td>是否必反</td>
+                    </thead>
+                    <tbody id="returnTbody">
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">正确返回示例</div>
+            <div class="panel-body">
+                {{ api_info.RightReturnDoc }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">错误返回示例</div>
+            <div class="panel-body">
+                {{ api_info.ErrReturnDoc }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">错误码</div>
+            <div class="panel-body">
+                {{ api_info.ErrCode }}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">开发者</div>
+            <div class="panel-body" id="developer">
+
+            </div>
+        </div>
+        <button class="btn btn-default" type="button" @click="update">修改按钮</button>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        $(document).ready(function () {
+            changeApiStatus('{{ api_info.ApiStatus }}');
+            changeBelogModel('{{ api_info.BelongModel }}');
+            changeBelongSystem('{{ api_info.BelongSystem }}');
+            changeDeveloper('{{ api_info.Developer }}');
+            inputParaTable();
+            returnParaTable();
+        });
+        function changeApiStatus(apiStatus) {
+            var api_status = '';
+            switch (apiStatus) {
+                case 'normal':
+                    api_status = '正常';
+                    break;
+                case 'invalid':
+                    api_status = '无效';
+                    break;
+                case 'developing':
+                    api_status = '开发中';
+                    break
+            }
+            $("#apiStatus").text(api_status)
+        }
+        function changeBelogModel(belongModel) {
+            var belong_model = '';
+            switch (belongModel) {
+                case 'UserManage':
+                    belong_model = '用户管理';
+                    break;
+                case 'SystemFunc':
+                    belong_model = '系统功能';
+                    break;
+                case 'Combination':
+                    belong_model = '组合';
+                    break;
+                case 'FinancitionMsg':
+                    belong_model = '财讯';
+                    break;
+                case 'Articles':
+                    belong_model = '文章';
+                    break;
+                case 'MsgPush':
+                    belong_model = '消息推送';
+                    break;
+                case 'StockCompetition':
+                    belong_model = '炒股大赛';
+                    break;
+                case 'Advertisement':
+                    belong_model = '广告';
+                    break;
+                case 'InterestManage':
+                    belong_model = '投顾管理';
+                    break;
+                case 'View':
+                    belong_model = '观点';
+                    break;
+                case 'Question':
+                    belong_model = '问题';
+                    break;
+                case 'SensitiveWords':
+                    belong_model = '敏感词';
+                    break;
+                case 'InvestmentCollege':
+                    belong_model = '投资学院';
+                    break;
+                case 'StockLive':
+                    belong_model = '股市直播';
+                    break;
+            }
+            $("#belongModel").text(belong_model)
+        }
+        function changeBelongSystem(belongSystem) {
+            var belong_system = '';
+            switch (belongSystem) {
+                case 'caJava':
+                    belong_system = '微证券中台';
+                    break;
+                case 'bus':
+                    belong_system = '云投顾bus';
+                    break;
+                case 'netHall':
+                    belong_system = '网厅';
+                    break;
+                case 'stockLiveBroadcast':
+                    belong_system = '股市直播(app)';
+                    break;
+                case 'broadcastBus':
+                    belong_system = '股市直播(后台)';
+                    break;
+                case 'web':
+                    belong_system = '智信理财师';
+                    break;
+                case 'chinalin_pay':
+                    belong_system = '华林支付中台';
+                    break;
+            }
+            $("#belongSystem").text(belong_system);
+        }
+        function changeDeveloper(developer) {
+            var Developer = '';
+            switch (developer) {
+                case 'wudw':
+                    Developer = '吴道万';
+                    break;
+                case 'xucx':
+                    Developer = '徐成勋';
+                    break;
+                case 'huangq':
+                    Developer = '黄强';
+                    break;
+            }
+            $("#developer").text(Developer)
+        }
+        function inputParaTable() {
+            var input_para_table = JSON.parse('{{ api_info.InputParas | safe }}');
+            for (var i = 0; i < input_para_table.length; i++) {
+                $("#inputTbody").append('<tr><td>' +
+                        input_para_table[i]['paraName'] + '</td>' +
+                        '<td>' + input_para_table[i]['paraType'] + '</td>' +
+                        '<td>' + input_para_table[i]['paraLength'] + '</td>' +
+                        '<td>' + input_para_table[i]['paraDoc'] + '</td>' +
+                        '<td>' + input_para_table[i]['paraDefault'] + '</td>' +
+                        '<td>' + changeStatus(input_para_table[i]['paraIsNeed']) + '</td>' + '</tr>')
+            }
+        }
+        function returnParaTable() {
+            var return_para_table = JSON.parse('{{ api_info.ReturnParas | safe }}');
+            for (var i = 0; i < return_para_table.length; i++) {
+                $("#returnTbody").append('<tr><td>' +
+                        return_para_table[i]['paraName'] + '</td>' +
+                        '<td>' + return_para_table[i]['paraType'] + '</td>' +
+                        '<td>' + return_para_table[i]['paraLength'] + '</td>' +
+                        '<td>' + return_para_table[i]['paraDoc'] + '</td>' +
+                        '<td>' + changeStatus(return_para_table[i]['paraIsNeed']) + '</td></tr>')
+            }
+        }
+
+        function changeStatus(status) {
+            switch (status) {
+                case 'yes':
+                    return '是';
+                    break;
+                case 'no':
+                    return '否';
+                    break
+            }
+        }
+    </script>
+{% endblock %}
