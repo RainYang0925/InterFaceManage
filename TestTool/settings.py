@@ -41,6 +41,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'UserGroup',
     'LogRecord',
+    'InterFaceManage'
 )
 
 MIDDLEWARE_CLASSES = (

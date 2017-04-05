@@ -140,60 +140,61 @@
         <div class="form-group">
             <label class="col-sm-2 control-label">请求示例</label>
             <div class="col-sm-8">
-                <textarea class="form-control" rows="5" id="RequestDemo"></textarea>
+                <textarea class="form-control" rows="5" v-model="requestdemo"></textarea>
             </div>
         </div>
         <div class="form-group">
-            <label class="col-sm-2 control-label">返回参数说明</label>
-            <div id="returnPara" data-box="01">
-                <div class="col-sm-1">
-                    <input class="form-control" placeholder="参数名" data-return="00">
-                </div>
-                <div class="col-sm-1">
-                    <select class="form-control" data-return="01">
-                        <option value="String">String</option>
-                        <option value="Int">Int</option>
-                        <option value="List">List</option>
-                        <option value="JSONString">JSONString</option>
-                        <option value="Date">Date</option>
-                        <option value="Boolean">Boolean</option>
-                    </select>
-                </div>
-                <div class="col-sm-1">
-                    <input class="form-control" placeholder="长度" data-return="02">
-                </div>
-                <div class="col-sm-3">
-                    <input class="form-control" placeholder="参数说明" data-return="03">
-                </div>
-                <div class="col-sm-1">
-                    <select class="form-control" data-return="04">
-                        <option value="no">非必返</option>
-                        <option value="yes">必返</option>
-                    </select>
-                </div>
-                <div class="col-sm-2">
-                    <button type="button" class="btn btn-default" id="returnParaMinus">
-                        <span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span>
-                    </button>
+            <div v-for="(returnPara, index) in returnParas">
+                <label class="col-sm-2 control-label">返回参数说明</label>
+                <div id="returnPara" data-box="01">
+                    <div class="col-sm-1">
+                        <input class="form-control" placeholder="参数名" v-model="returnPara.paraName">
+                    </div>
+                    <div class="col-sm-1">
+                        <select class="form-control" v-model="returnPara.paraType">
+                            <option value="String">String</option>
+                            <option value="Int">Int</option>
+                            <option value="List">List</option>
+                            <option value="JSONString">JSONString</option>
+                            <option value="Date">Date</option>
+                            <option value="Boolean">Boolean</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-1">
+                        <input class="form-control" placeholder="长度" v-model="returnPara.paraLength">
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="form-control" placeholder="参数说明" v-model="returnPara.paraDoc">
+                    </div>
+                    <div class="col-sm-1">
+                        <select class="form-control" v-model="returnPara.paraIsNeed">
+                            <option value="no">非必返</option>
+                            <option value="yes">必返</option>
+                        </select>
+                    </div>
+                    <div class="col-sm-2">
+                        <button type="button" class="btn btn-danger" @click="returnParaAdd">+</button>
+                        <button type="button" class="btn btn-danger" @click="returnParaRemove(index)">X</button>
+                    </div>
                 </div>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">正确返回示例</label>
             <div class="col-sm-8">
-                <textarea class="form-control" rows="5" id="RightReturnDoc"></textarea>
+                <textarea class="form-control" rows="5" v-model="rightreturndoc"></textarea>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">错误返回示例</label>
             <div class="col-sm-8">
-                <textarea class="form-control" rows="3" id="ErrorReturnDoc"></textarea>
+                <textarea class="form-control" rows="3" v-model="errreturndoc"></textarea>
             </div>
         </div>
         <div class="form-group">
             <label class="col-sm-2 control-label">错误码</label>
             <div class="col-sm-8">
-                <textarea class="form-control" rows="3" id="ErrorCode"></textarea>
+                <textarea class="form-control" rows="3" v-model="errcode"></textarea>
             </div>
         </div>
         <div class="form-group">
@@ -236,11 +237,62 @@
                     paraDoc: '',
                     paraDefault: '',
                     paraIsNeed: 'no'
-                }
+                },
+                requestdemo: this.requestdemo,
+                returnParas: [
+                    {
+                        paraName: '',
+                        paraType: 'String',
+                        paraLength: '',
+                        paraDoc: '',
+                        paraIsNeed: 'no'
+                    }
+                ],
+                returnPara: {
+                    paraName: '',
+                    paraType: 'String',
+                    paraLength: '',
+                    paraDoc: '',
+                    paraIsNeed: 'no'
+                },
+                rightreturndoc: this.rightreturndoc,
+                errreturndoc: this.errreturndoc,
+                errcode: this.errcode
             },
             methods: {
                 submit: function () {
-                    console.log(this.inputparas)
+                    var formdata = {
+                        'apistatus': this.apistatus,
+                        'belongmodel': this.belongmodel,
+                        'belongsystem': this.belongsystem,
+                        'requestmethod': this.requestmethod,
+                        'mockurl': this.mockurl,
+                        'requestheaddoc': this.requestheaddoc,
+                        'inputparas': this.inputparas,
+                        'returnparas': this.returnParas,
+                        'apiname': this.apiname,
+                        'userrange': this.userrange,
+                        'apiurl': this.apiurl,
+                        'rightreturndoc': this.rightreturndoc,
+                        'errreturndoc': this.errreturndoc,
+                        'errcode': this.errcode,
+                        'apiversion': this.apiversion,
+                        'developer': this.developer,
+                        'requestdemo': this.requestdemo
+                    };
+
+                    $.ajaxSetup({
+                            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+                        });
+                    $.post('/interfacemanage/newinterface/', formdata, function (result) {
+                        console.log(result);
+                        if (result['error_no'] == 'IF0000'){
+                            alert(result['error_info']);
+                            <!-- 跳转详情页等待补充-->
+                        }else {
+                            alert(result['error_info'])
+                        }
+                    })
                 },
                 inputParaRemove: function (i) {
                     this.inputparas.splice(i, 1)
@@ -254,6 +306,19 @@
                         paraDoc: '',
                         paraDefault: '',
                         paraIsNeed: 'yes'
+                    }
+                },
+                returnParaRemove: function (i) {
+                    this.returnParas.splice(i, 1)
+                },
+                returnParaAdd: function () {
+                    this.returnParas.push(this.returnPara);
+                    this.returnPara = {
+                        paraName: '',
+                        paraType: 'String',
+                        paraLength: '',
+                        paraDoc: '',
+                        paraIsNeed: 'no'
                     }
                 }
             }
