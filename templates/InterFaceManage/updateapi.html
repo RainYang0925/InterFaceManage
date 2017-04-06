@@ -1,6 +1,6 @@
 {% extends 'base.html' %}
 {% block title %}
-    新增接口
+    修改接口
 {% endblock %}
 {% block ziyuan %}
     <script src="/static/js/UserGroup/loginCheck.js"></script>
@@ -206,30 +206,26 @@
 {% endblock %}
 {% block script %}
     <script>
-        var apiform = new Vue({
+        var updateapi = new Vue({
             el: '#apiform',
             data: {
-                apiversion: this.apiversionm,
-                apiname: this.apiname,
-                apistatus: 'normal',
-                belongmodel: 'UserManage',
-                belongsystem: 'caJava',
-                developer: this.developer,
-                userrange: this.userrange,
-                apiurl: this.apiurl,
-                requestmethod: 'GET',
-                mockurl: '无',
-                requestheaddoc: '无',
-                inputparas: [
-                    {
-                        paraName: '',
-                        paraType: 'String',
-                        paraLength: '',
-                        paraDoc: '',
-                        paraDefault: '',
-                        paraIsNeed: 'no'
-                    }
-                ],
+                apiversion: '{{ api_info.api_version }}',
+                apiname: '{{ api_info.api_name }}',
+                apistatus: '{{ api_info.api_status }}',
+                belongmodel: '{{ api_info.belong_model }}',
+                belongsystem: '{{ api_info.belong_system }}',
+                developer: '{{ api_info.developer }}',
+                userrange: '{{ api_info.user_range }}',
+                apiurl: '{{ api_info.api_url }}',
+                requestmethod: '{{ api_info.request_method }}',
+                mockurl: '{{ api_info.mock_url }}',
+                requestheaddoc: '{{ api_info.request_head_doc }}',
+                inputparas:{{ api_info.input_paras|safe }},
+                requestdemo: '{{ api_info.request_demo }}',
+                returnParas: {{ api_info.return_paras|safe }},
+                rightreturndoc: '{{ api_info.right_return_doc }}',
+                errreturndoc: '{{ api_info.err_return_doc }}',
+                errcode: '{{ api_info.err_code }}',
                 inputPara: {
                     paraName: '',
                     paraType: 'String',
@@ -238,28 +234,42 @@
                     paraDefault: '',
                     paraIsNeed: 'no'
                 },
-                requestdemo: this.requestdemo,
-                returnParas: [
-                    {
-                        paraName: '',
-                        paraType: 'String',
-                        paraLength: '',
-                        paraDoc: '',
-                        paraIsNeed: 'no'
-                    }
-                ],
                 returnPara: {
                     paraName: '',
                     paraType: 'String',
                     paraLength: '',
                     paraDoc: '',
                     paraIsNeed: 'no'
-                },
-                rightreturndoc: this.rightreturndoc,
-                errreturndoc: this.errreturndoc,
-                errcode: this.errcode
+                }
             },
             methods: {
+                inputParaAdd: function () {
+                    this.inputparas.push(this.inputPara);
+                    this.inputPara = {
+                        paraName: '',
+                        paraType: 'String',
+                        paraLength: '',
+                        paraDoc: '',
+                        paraDefault: '',
+                        paraIsNeed: 'no'
+                    }
+                },
+                inputParaRemove: function (i) {
+                    this.inputparas.splice(i, 1)
+                },
+                returnParaRemove: function (i) {
+                    this.returnParas.splice(i, 1)
+                },
+                returnParaAdd: function () {
+                    this.returnParas.push(this.returnPara);
+                    this.returnPara = {
+                        paraName: '',
+                        paraType: 'String',
+                        paraLength: '',
+                        paraDoc: '',
+                        paraIsNeed: 'no'
+                    }
+                },
                 submit: function () {
                     var formdata = {
                         'apistatus': this.apistatus,
@@ -280,45 +290,17 @@
                         'developer': this.developer,
                         'requestdemo': this.requestdemo
                     };
-
                     $.ajaxSetup({
-                            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
-                        });
-                    $.post('/interfacemanage/newinterface/', formdata, function (result) {
+                        data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+                    });
+                    $.post('/interfacemanage/updateapi/{{ api_info.id }}/', formdata, function (result) {
                         if (result['error_no'] == 'IF0000'){
                             alert(result['error_info']);
-                            window.location.href = '/interfacemanage/'
+                            window.location.href = '/interfacemanage/interface/{{ api_info.id }}/'
                         }else {
                             alert(result['error_info'])
                         }
                     })
-                },
-                inputParaRemove: function (i) {
-                    this.inputparas.splice(i, 1)
-                },
-                inputParaAdd: function () {
-                    this.inputparas.push(this.inputPara);
-                    this.inputPara = {
-                        paraName: '',
-                        paraType: 'String',
-                        paraLength: '',
-                        paraDoc: '',
-                        paraDefault: '',
-                        paraIsNeed: 'no'
-                    }
-                },
-                returnParaRemove: function (i) {
-                    this.returnParas.splice(i, 1)
-                },
-                returnParaAdd: function () {
-                    this.returnParas.push(this.returnPara);
-                    this.returnPara = {
-                        paraName: '',
-                        paraType: 'String',
-                        paraLength: '',
-                        paraDoc: '',
-                        paraIsNeed: 'no'
-                    }
                 }
             }
         })

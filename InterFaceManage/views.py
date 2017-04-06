@@ -97,6 +97,89 @@ def interface(request, api_id):
 	api_info = Interface.objects.get(id=int(api_id))
 	return render(request, 'InterFaceManage/interface.html', {'api_info': api_info})
 
+
+def update_api(request, api_id):
+	if request.method == 'POST':
+		rst_data = {'ttt': 'ttt'}
+		inputParas = []
+		inputCount = 0
+		returnParas = []
+		returnCount = 0
+		for key in request.POST:
+			if key.startswith('inputparas'):
+				inputCount += 1
+			if key.startswith('returnparas'):
+				returnCount += 1
+		inputCount /= 6
+		returnCount /= 5
+		for x in range(inputCount):
+			data = {
+				'paraName': request.POST.get('inputparas[' + str(x) + '][paraName]'),
+				'paraType': request.POST.get('inputparas[' + str(x) + '][paraType]'),
+				'paraLength': request.POST.get('inputparas[' + str(x) + '][paraLength]'),
+				'paraDoc': request.POST.get('inputparas[' + str(x) + '][paraDoc]'),
+				'paraDefault': request.POST.get('inputparas[' + str(x) + '][paraDefault]'),
+				'paraIsNeed': request.POST.get('inputparas[' + str(x) + '][paraIsNeed]')
+			}
+			inputParas.append(data)
+		for x in range(returnCount):
+			data = {
+				'paraName': request.POST.get('returnparas[' + str(x) + '][paraName]'),
+				'paraType': request.POST.get('returnparas[' + str(x) + '][paraType]'),
+				'paraLength': request.POST.get('returnparas[' + str(x) + '][paraLength]'),
+				'paraDoc': request.POST.get('returnparas[' + str(x) + '][paraDoc]'),
+				'paraIsNeed': request.POST.get('returnparas[' + str(x) + '][paraIsNeed]')
+			}
+			returnParas.append(data)
+		interface_data = {
+			'api_status': request.POST.get('apistatus'),
+			'belong_model': request.POST.get('belongmodel'),
+			'belong_system': request.POST.get('belongsystem'),
+			'request_method': request.POST.get('requestmethod'),
+			'mock_url': request.POST.get('mockurl'),
+			'request_head_doc': request.POST.get('requestheaddoc'),
+			'api_name': request.POST.get('apiname'),
+			'user_range': request.POST.get('userrange'),
+			'api_url': request.POST.get('apiurl'),
+			'right_return_doc': request.POST.get('rightreturndoc'),
+			'err_return_doc': request.POST.get('errreturndoc'),
+			'err_code': request.POST.get('errcode'),
+			'api_version': request.POST.get('apiversion'),
+			'developer': request.POST.get('developer'),
+			'request_demo': request.POST.get('requestdemo'),
+			'input_paras': json.dumps(inputParas),
+			'return_paras': json.dumps(returnParas)
+		}
+
+		api_manage.update_api(api_id, interface_data)  # 更新数据库
+		rst_data['error_no'] = 'IF0000'
+		rst_data['error_info'] = errconfig.errConfig['IF0000']
+		return JsonResponse(rst_data, safe=False)
+
+	api_info = Interface.objects.get(id=int(api_id))
+	rst_info = {
+		'api_version': api_info.ApiVersion,
+		'api_name': api_info.ApiName,
+		'api_status': api_info.ApiStatus,
+		'belong_model': api_info.BelongModel,
+		'belong_system': api_info.BelongSystem,
+		'developer': api_info.Developer,
+		'user_range': api_info.UserRange,
+		'api_url': api_info.ApiUrl,
+		'request_method': api_info.RequestMethod,
+		'mock_url': api_info.MockUrl,
+		'request_head_doc': api_info.RequestHeadDoc,
+		'input_paras': api_info.InputParas,
+		'request_demo': api_info.RequestDemo,
+		'return_paras': api_info.ReturnParas,
+		'right_return_doc': api_info.RightReturnDoc,
+		'err_return_doc': api_info.ErrReturnDoc,
+		'err_code': api_info.ErrCode,
+		'id': api_id
+	}
+
+	return render(request, 'InterFaceManage/updateapi.html', {'api_info': rst_info})
+
 # ===============AJAX======================
 
 

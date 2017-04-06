@@ -31,3 +31,24 @@ class ApiManage(object):
 							InputParas=api_info['input_paras'],
 							ReturnParas=api_info['return_paras'])
 		isWrite.save()
+
+	def update_api(self, api_id, api_info):
+		obj = Interface.objects.get(id=api_id)
+		obj.ApiStatus = api_info['api_status']
+		obj.BelongModel = api_info['belong_model']
+		obj.BelongSystem = api_info['belong_system']
+		obj.RequestMethod = api_info['request_method']
+		obj.MockUrl = api_info['mock_url']
+		obj.RequestHeadDoc = api_info['request_head_doc']
+		obj.ApiName = api_info['api_name']
+		obj.UserRange = api_info['user_range']
+		obj.ApiUrl = api_info['api_url']
+		obj.RightReturnDoc = api_info['right_return_doc']
+		obj.ErrReturnDoc = api_info['err_return_doc']
+		obj.ErrCode = api_info['err_code']
+		obj.ApiVersion = api_info['api_version']
+		obj.Developer = api_info['developer']
+		obj.RequestDemo = api_info['request_demo']
+		obj.InputParas = api_info['input_paras']
+		obj.ReturnParas = api_info['return_paras']
+		obj.save()

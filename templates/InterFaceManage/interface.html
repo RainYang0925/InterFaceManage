@@ -127,7 +127,6 @@
                     <td>是否必反</td>
                     </thead>
                     <tbody id="returnTbody">
-
                     </tbody>
                 </table>
             </div>
@@ -151,7 +150,7 @@
             </div>
         </div>
 
-        <button class="btn btn-default" type="button" @click="update">修改按钮</button>
+        <button class="btn btn-default" type="button"><a href="{% url 'updateapi' api_info.id %}">修改按钮</a></button>
     </div>
 {% endblock %}
 {% block script %}
