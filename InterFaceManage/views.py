@@ -150,10 +150,22 @@ def update_api(request, api_id):
 			'input_paras': json.dumps(inputParas),
 			'return_paras': json.dumps(returnParas)
 		}
-
-		api_manage.update_api(api_id, interface_data)  # 更新数据库
-		rst_data['error_no'] = 'IF0000'
-		rst_data['error_info'] = errconfig.errConfig['IF0000']
+		print interface_data
+		try:
+			api_manage.update_api(api_id, interface_data)  # 更新数据库
+			rst_data['error_no'] = 'IF0000'
+			rst_data['error_info'] = errconfig.errConfig['IF0000']
+			userinfo = login.get_user_info(interface_data['developer'], 'username')
+			logData = {
+				'username': userinfo['username'],
+				'nickname': userinfo['nickname'],
+				'operate_action': errconfig.actionConfig['AC0002']
+			}
+			logRecord.write_log(logData)
+		except Exception as e:
+			print e
+			rst_data['error_no'] = 'IF0002'
+			rst_data['error_info'] = errconfig.errConfig['IF0002']
 		return JsonResponse(rst_data, safe=False)
 
 	api_info = Interface.objects.get(id=int(api_id))
@@ -164,17 +176,17 @@ def update_api(request, api_id):
 		'belong_model': api_info.BelongModel,
 		'belong_system': api_info.BelongSystem,
 		'developer': api_info.Developer,
-		'user_range': api_info.UserRange,
+		'user_range': api_info.UserRange.replace('\n', '\\n'),
 		'api_url': api_info.ApiUrl,
 		'request_method': api_info.RequestMethod,
-		'mock_url': api_info.MockUrl,
+		'mock_url': api_info.MockUrl.replace('\n', '\\n'),
 		'request_head_doc': api_info.RequestHeadDoc,
 		'input_paras': api_info.InputParas,
-		'request_demo': api_info.RequestDemo,
+		'request_demo': api_info.RequestDemo.replace('\n', '\\n'),
 		'return_paras': api_info.ReturnParas,
-		'right_return_doc': api_info.RightReturnDoc,
-		'err_return_doc': api_info.ErrReturnDoc,
-		'err_code': api_info.ErrCode,
+		'right_return_doc': api_info.RightReturnDoc.replace('\n', '\\n'),
+		'err_return_doc': api_info.ErrReturnDoc.replace('\n', '\\n'),
+		'err_code': api_info.ErrCode.replace('\n', '\\n'),
 		'id': api_id
 	}
 
