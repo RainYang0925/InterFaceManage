@@ -282,13 +282,13 @@
                     };
 
                     $.ajaxSetup({
-                            data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
-                        });
+                        data: {csrfmiddlewaretoken: '{{ csrf_token }}'}
+                    });
                     $.post('/interfacemanage/newinterface/', formdata, function (result) {
-                        if (result['error_no'] == 'IF0000'){
+                        if (result['error_no'] == 'IF0000') {
                             alert(result['error_info']);
                             window.location.href = '/interfacemanage/'
-                        }else {
+                        } else {
                             alert(result['error_info'])
                         }
                     })

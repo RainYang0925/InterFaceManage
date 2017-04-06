@@ -126,7 +126,8 @@ def check_token(request):
 
 def check_auth(request):
 	token = request.GET.get('usertoken')
-	if Login_Check.check_auth(token, 99):
+	level = request.GET.get('level')
+	if Login_Check.check_auth(token, int(level)):
 		userinfo = Login_Check.get_user_info(token, 'token')
 		userinfo['error_no'] = 'UG0000'
 		userinfo['error_msg'] = errconfig.errConfig['UG0000']

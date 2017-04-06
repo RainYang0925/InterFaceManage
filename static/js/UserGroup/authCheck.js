@@ -2,14 +2,15 @@
  * Created by SvenWeng on 2017/3/28.
  */
 $(document).ready(function () {
-    authCheck()
+    authCheck(99)
 });
 
-function authCheck() {
+function authCheck(level) {
     var userToken = localStorage.getItem(['loginToken']);
     if (userToken) {
         data = {
-            'usertoken': userToken
+            'usertoken': userToken,
+            'level': level
         };
         $.get('/usergroup/checkauth/', data, function (result) {
             if (result['error_no'] == 'UG0000') {
