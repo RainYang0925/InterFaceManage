@@ -1,0 +1,184 @@
+{% extends 'base.html' %}
+{% block ziyuan %}
+    <script src="/static/js/UserGroup/loginCheck.js"></script>
+{% endblock %}
+{% block title %}
+    查询接口
+{% endblock %}
+{% block body %}
+    <div class="container" id="qry">
+        <div class="row">
+            <div class="col-md-4">
+                <div class="panel panel-default">
+                    <div class="panel-heading">接口名称</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <input class="form-control" v-model="api_name">
+                            <button type="button" class="btn btn-default" @click="qry_by_apiname">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">所属模块</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <select class="form-control" v-model="belong_model">
+                                <option value="UserManage">用户管理</option>
+                                <option value="SystemFunc">系统功能</option>
+                                <option value="Combination">组合</option>
+                                <option value="FinancitionMsg">财讯</option>
+                                <option value="Articles">文章</option>
+                                <option value="MsgPush">消息推送</option>
+                                <option value="StockCompetition">炒股大赛</option>
+                                <option value="Advertisement">广告</option>
+                                <option value="InterestManage">投顾管理</option>
+                                <option value="View">观点</option>
+                                <option value="Question">问题</option>
+                                <option value="SensitiveWords">敏感词</option>
+                                <option value="InvestmentCollege">投资学院</option>
+                                <option value="StockLive">股市直播</option>
+                            </select>
+                            <button type="button" class="btn btn-default" @click="qry_by_model">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">所属系统</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <select class="form-control" v-model="belong_system">
+                                <option value="caJava">微证券中台</option>
+                                <option value="bus">云投顾bus</option>
+                                <option value="netHall">网厅</option>
+                                <option value="stockLiveBroadcast">股市直播（app）</option>
+                                <option value="broadcastBus">股市直播（后台）bus</option>
+                                <option value="web">智信理财师</option>
+                                <option value="chinalin_pay">华林支付中台</option>
+                            </select>
+                            <button type="submit" class="btn btn-default" @click="qry_by_system">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">开发者</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <select class="form-control" v-model="developer">
+                                <option value="wudw">吴道万</option>
+                                <option value="xucx">徐成勋</option>
+                                <option value="huangq">黄强</option>
+                            </select>
+                            <button type="submit" class="btn btn-default" @click="qry_by_developer">查询</button>
+                        </div>
+                    </div>
+                </div>
+                <div class="panel panel-default">
+                    <div class="panel-heading">请求参数</div>
+                    <div class="panel-body">
+                        <div class="form-group">
+                            <input class="form-control" v-model="input_paras">
+                            <button type="submit" class="btn btn-default" @click="qry_by_paras">查询</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8">
+                <div id="api_list">
+
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block script %}
+    <script>
+        var qry = new Vue({
+            el: '#qry',
+            data: {
+                api_name: this.api_name,
+                belong_model: 'UserManage',
+                belong_system: this.belong_system,
+                developer: this.developer,
+                input_paras: this.input_paras
+            },
+            methods: {
+                qry_by_apiname: function () {
+                    var qry_info_apiname = {
+                        'qry_method': 'api_name',
+                        'qry_data': this.api_name
+                    };
+                    $.get('/interfacemanage/getapi/', qry_info_apiname, function (rst) {
+                        $("#api_list").html('');
+                        for (var i = 0; i < rst.length; i++) {
+                            $("#api_list").append(
+                                    '<li class="list-group-item"><a href="/interfacemanage/interface/' + rst[i]["api_id"] + '/">' + rst[i]["api_name"] + '</a></li>'
+                            )
+                        }
+
+                    })
+                },
+                qry_by_model: function () {
+                    var qry_info_model = {
+                        'qry_method': 'belong_model',
+                        'qry_data': this.belong_model
+                    };
+                    $.get('/interfacemanage/getapi/', qry_info_model, function (rst) {
+                        $("#api_list").html('');
+                        for (var i = 0; i < rst.length; i++) {
+                            $("#api_list").append(
+                                    '<li class="list-group-item"><a href="/interfacemanage/interface/' + rst[i]["api_id"] + '/">' + rst[i]["api_name"] + '</a></li>'
+                            )
+                        }
+
+                    })
+                },
+                qry_by_system: function () {
+                    var qry_info_model = {
+                        'qry_method': 'belong_system',
+                        'qry_data': this.belong_system
+                    };
+                    $.get('/interfacemanage/getapi/', qry_info_model, function (rst) {
+                        console.log(rst);
+                        $("#api_list").html('');
+                        for (var i = 0; i < rst.length; i++) {
+                            $("#api_list").append(
+                                    '<li class="list-group-item"><a href="/interfacemanage/interface/' + rst[i]["api_id"] + '/">' + rst[i]["api_name"] + '</a></li>'
+                            )
+                        }
+
+                    })
+                },
+                qry_by_developer: function () {
+                    var qry_info = {
+                        'qry_method': 'develop',
+                        'qry_data': this.developer
+                    };
+                    $.get('/interfacemanage/getapi/', qry_info, function (rst) {
+                        $("#api_list").html('');
+                        for (var i = 0; i < rst.length; i++) {
+                            $("#api_list").append(
+                                    '<li class="list-group-item"><a href="/interfacemanage/interface/' + rst[i]["api_id"] + '/">' + rst[i]["api_name"] + '</a></li>'
+                            )
+                        }
+
+                    })
+                },
+                qry_by_paras: function () {
+                    var qry_info = {
+                        'qry_method': 'request_para',
+                        'qry_data': this.input_paras
+                    };
+                    $.get('/interfacemanage/getapi/', qry_info, function (rst) {
+                        $("#api_list").html('');
+                        for (var i = 0; i < rst.length; i++) {
+                            $("#api_list").append(
+                                    '<li class="list-group-item"><a href="/interfacemanage/interface/' + rst[i]["api_id"] + '/">' + rst[i]["api_name"] + '</a></li>'
+                            )
+                        }
+
+                    })
+                }
+            }
+        })
+    </script>
+{% endblock %}

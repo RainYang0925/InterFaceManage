@@ -11,6 +11,8 @@ urlpatterns = [
 	url(r'^newinterface/', views.newinterface, name='newinterface'),
 	url(r'^interface/(?P<api_id>\d+)/$', views.interface),
 	url(r'^updateapi/(?P<api_id>\d+)/$', views.update_api, name='updateapi'),
+	url(r'^qryapi/', views.qry_api, name='qryapi'),
 	# ============Ajax==============
 	url(r'^getapirecord/', views.get_api_record),
+	url(r'^getapi/', views.get_api),
  ]

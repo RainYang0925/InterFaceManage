@@ -192,6 +192,10 @@ def update_api(request, api_id):
 
 	return render(request, 'InterFaceManage/updateapi.html', {'api_info': rst_info})
 
+
+def qry_api(request):
+	return render(request, 'InterFaceManage/qryapi.html')
+
 # ===============AJAX======================
 
 
@@ -205,3 +209,14 @@ def get_api_record(request):
 		}
 		rst.append(data)
 	return JsonResponse(rst, safe=False)
+
+
+def get_api(request):
+	qry_method = request.GET.get('qry_method')
+	qry_data = request.GET.get('qry_data')
+	print qry_data
+	try:
+		data = api_manage.qry_api(qry_method, qry_data)
+		return JsonResponse(data, safe=False)
+	except Exception as e:
+		print e

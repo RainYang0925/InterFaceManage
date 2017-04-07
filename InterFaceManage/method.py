@@ -52,3 +52,24 @@ class ApiManage(object):
 		obj.InputParas = api_info['input_paras']
 		obj.ReturnParas = api_info['return_paras']
 		obj.save()
+
+	def qry_api(self, type, condition):
+		rst_data = []
+		if type == 'api_name':
+			obj = Interface.objects.filter(ApiName__contains=condition)
+		elif type == 'belong_model':
+			obj = Interface.objects.filter(BelongModel__contains=condition)
+		elif type == 'belong_system':
+			obj = Interface.objects.filter(BelongSystem__contains=condition)
+		elif type == 'develop':
+			obj = Interface.objects.filter(Developer__contains=condition)
+		elif type == 'request_para':
+			obj = Interface.objects.filter(InputParas__contains=condition)
+		for x in obj:
+			data = {
+				'api_name': x.ApiName,
+				'api_id': x.id
+			}
+			rst_data.append(data)
+		print rst_data
+		return rst_data
